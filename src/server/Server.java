@@ -16,13 +16,13 @@ import java.net.Socket;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-<<<<<<< HEAD
+
 import java.io.*;
-=======
+
 import java.util.List;
 
 import javax.imageio.IIOException;
->>>>>>> 17ce59a1375761fed7114df78fc02f66ae3d9ff4
+
 
 public class Server {
 
