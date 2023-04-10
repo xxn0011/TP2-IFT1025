@@ -154,61 +154,6 @@ public class Server {
             System.out.println("Error reading or writing the file: " + e.getMessage());
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //On sépare les lignes et on les ajoute dans un tableau.
-            String[] coursParts = coursList.split("\n");
-
-            reader.close();
-
-            System.out.println("Listede cours" + coursParts);
-
-            //On créé le fichier à exporter
-            FileOutputStream Course = new FileOutputStream("Course.txt");
-
-            //On boucle sur l'ensemble des cours disponibles
-            for (int i = 0; i<= coursParts.length; i++){
-
-                if(arg == "Automne" && coursParts[i].contains("Automne")){
-
-                    ObjectOutputStream coursAutomne = new ObjectOutputStream(Course);
-                    coursAutomne.writeObject(coursParts[i]);
-                }
-
-                if(arg == "Hiver" && coursParts[i].contains("Hiver")){
-
-                    ObjectOutputStream coursHiver = new ObjectOutputStream(Course);
-                    coursHiver.writeObject(coursParts[i]);
-                }
-
-                if(arg == "Ete" && coursParts[i].contains("Ete")){
-                    
-                    ObjectOutputStream coursEte = new ObjectOutputStream(Course);
-                    coursEte.writeObject(coursParts[i]);
-                }
-
-                else{
-                    System.out.println("semestre inconnu");
-                }
-            }
-
-            Course.close();
-
-        }catch (IOException FileNotFoundException){
-            System.out.println("Incapable de trouver le fichier");
-        }
-
     }
 
 
