@@ -1,7 +1,7 @@
 package server;
 
 import javafx.util.Pair;
-import server.models.Course;
+import server.models.RegistrationForm;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
@@ -13,6 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.io.*;
 
 public class Server {
 
@@ -161,5 +162,25 @@ public class Server {
      */
     public void handleRegistration() {
         // TODO: implémenter cette méthode
+        try {
+
+            ObjectInputStream registration = new ObjectInputStream(objectInputStream);
+            RegistrationForm registrationForm = (RegistrationForm) registration.readObject();
+            registration.close();
+
+            FileWriter inscription = new FileWriter("inscription.txt");
+            BufferedWriter writer = new BufferedWriter(inscription);
+            inscription.write(registrationForm.toString()+"\n");
+
+            inscription.close();
+            writer.flush();
+
+            System.out.println("inscription enregistree");
+
+        } catch (IOException ioException){
+            System.out.println("Erreur à l'ouverture du fichier");
+        } catch (ClassNotFoundException classNotFoundException){
+            System.out.println("Erreur: ClassNotFoundException");
+        }
     }
 }
