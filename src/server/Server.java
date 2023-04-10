@@ -2,26 +2,19 @@ package server;
 
 import javafx.util.Pair;
 import server.models.RegistrationForm;
+import server.models.Course;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import java.io.*;
 
 import java.util.List;
-
-import javax.imageio.IIOException;
 
 
 public class Server {
@@ -104,7 +97,7 @@ public class Server {
      La méthode gère les exceptions si une erreur se produit lors de la lecture du fichier ou de l'écriture de l'objet dans le flux.
      @param arg la session pour laquelle on veut récupérer la liste des cours
      */
-    public void handleLoadCourses(String arg) throws IOException{
+    public void handleLoadCourses(String arg){
 
         
         BufferedReader reader = null;
