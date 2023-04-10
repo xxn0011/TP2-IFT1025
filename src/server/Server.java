@@ -4,15 +4,21 @@ import javafx.util.Pair;
 import server.models.Course;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
 import java.net.ServerSocket;
 import java.net.Socket;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import javax.imageio.IIOException;
 
 public class Server {
 
@@ -94,21 +100,72 @@ public class Server {
      La méthode gère les exceptions si une erreur se produit lors de la lecture du fichier ou de l'écriture de l'objet dans le flux.
      @param arg la session pour laquelle on veut récupérer la liste des cours
      */
-    public void handleLoadCourses(String arg) {
+    public void handleLoadCourses(String arg) throws IOException{
+
+        
+        BufferedReader reader = null;
         try {
 
             // /!\ le chemin du fichier cours.txt peut causer une erreur 
             //Lecture du fichier cours.txt
             FileReader cours = new FileReader("cours.txt");
-            BufferedReader reader = new BufferedReader(cours);
+            reader = new BufferedReader(cours);
 
+            //Création de la liste d'objets qui va contenir tous les cours.
+            List<Course> allCourses = new ArrayList<>();
 
-            String  coursList = "";
             String line = reader.readLine();
             while(line != null){
-                coursList += line;  //line + "\n"
+
+                //On créé un tableau contenant les éléments de chaque ligne
+                String [] elements = line.split("\t");
+
+                String nom = elements[0];
+                String code = elements[1];
+                String session = elements[2];
+
+                //On créé un cours pour chaque ligne puis on l'ajoute à la liste
+                //allCourses
+                Course course = new Course(nom, code, session);
+                allCourses.add(course);
+                
                 line = reader.readLine();
             }
+
+            reader.close();
+
+            FileOutputStream fileOutputStream = new FileOutputStream("CoursDeLaSessionDemandee.txt");
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            for(Course course : allCourses){
+                if (course.getSession().equals(arg)){
+                    objectOutputStream.writeObject(course);
+
+                }
+
+            }
+            objectOutputStream.close();
+
+        }catch (FileNotFoundException e){
+            System.out.println("File not found: " + e.getMessage());
+
+        }
+        catch(IOException e){
+            System.out.println("Error reading or writing the file: " + e.getMessage());
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             //On sépare les lignes et on les ajoute dans un tableau.
             String[] coursParts = coursList.split("\n");
@@ -151,6 +208,7 @@ public class Server {
         }catch (IOException FileNotFoundException){
             System.out.println("Incapable de trouver le fichier");
         }
+
     }
 
 
