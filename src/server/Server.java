@@ -1,7 +1,11 @@
 package server;
 
 import javafx.util.Pair;
+import server.models.Course;
 
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -91,8 +95,64 @@ public class Server {
      @param arg la session pour laquelle on veut récupérer la liste des cours
      */
     public void handleLoadCourses(String arg) {
-        // TODO: implémenter cette méthode
+        try {
+
+            // /!\ le chemin du fichier cours.txt peut causer une erreur 
+            //Lecture du fichier cours.txt
+            FileReader cours = new FileReader("cours.txt");
+            BufferedReader reader = new BufferedReader(cours);
+
+
+            String  coursList = "";
+            String line = reader.readLine();
+            while(line != null){
+                coursList += line;  //line + "\n"
+                line = reader.readLine();
+            }
+
+            //On sépare les lignes et on les ajoute dans un tableau.
+            String[] coursParts = coursList.split("\n");
+
+            reader.close();
+
+            System.out.println("Listede cours" + coursParts);
+
+            //On créé le fichier à exporter
+            FileOutputStream Course = new FileOutputStream("Course.txt");
+
+            //On boucle sur l'ensemble des cours disponibles
+            for (int i = 0; i<= coursParts.length; i++){
+
+                if(arg == "Automne" && coursParts[i].contains("Automne")){
+
+                    ObjectOutputStream coursAutomne = new ObjectOutputStream(Course);
+                    coursAutomne.writeObject(coursParts[i]);
+                }
+
+                if(arg == "Hiver" && coursParts[i].contains("Hiver")){
+
+                    ObjectOutputStream coursHiver = new ObjectOutputStream(Course);
+                    coursHiver.writeObject(coursParts[i]);
+                }
+
+                if(arg == "Ete" && coursParts[i].contains("Ete")){
+                    
+                    ObjectOutputStream coursEte = new ObjectOutputStream(Course);
+                    coursEte.writeObject(coursParts[i]);
+                }
+
+                else{
+                    System.out.println("semestre inconnu");
+                }
+            }
+
+            Course.close();
+
+        }catch (IOException FileNotFoundException){
+            System.out.println("Incapable de trouver le fichier");
+        }
     }
+
 
     /**
      Récupérer l'objet 'RegistrationForm' envoyé par le client en utilisant 'objectInputStream', l'enregistrer dans un fichier texte
